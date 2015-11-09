@@ -6,6 +6,20 @@
 //  Copyright © 2015年 李亮. All rights reserved.
 //
 
+
+/*
+ 
+ 连接网络时，区域监控更及时。
+ 
+ CLLocationManager有区域监控范围设置。maximumRegionMonitoringDistance
+ 
+ monitoredRegions 是所有CLLocationManager共享的。
+ 
+ 由于区域监控事件被relaunch时，AppDelegate的didFinishLaunchingWithOptions方法传入的dict中包含UIApplicationLaunchOptionsLocationKey
+ 
+ */
+
+
 #import "ViewController.h"
 #import <MapKit/MapKit.h>
 #import <CoreLocation/CoreLocation.h>
@@ -66,15 +80,16 @@
             }
         }];
 //
-//        [geocoder geocodeAddressString:@"北京市海淀区北辰机械厂" completionHandler:^(NSArray<CLPlacemark *> * _Nullable placemarks, NSError * _Nullable error) {
-//            CLPlacemark *placemark = placemarks.firstObject;
-//            NSLog(@"%@_%@",placemark.location,placemark.name);
-//        }];
+        [geocoder geocodeAddressString:@"北京市海淀区北辰机械厂" completionHandler:^(NSArray<CLPlacemark *> * _Nullable placemarks, NSError * _Nullable error) {
+            CLPlacemark *placemark = placemarks.firstObject;
+            NSLog(@"%@_%@",placemark.location,placemark.name);
+        }];
     }
 }
 
 - (IBAction)btn2Clicked:(id)sender {
 
+    //模拟器模拟的位置
 //    CLLocationCoordinate2D center1 = CLLocationCoordinate2DMake(37.334526,-122.037833);
 //    CLLocationCoordinate2D center2 = CLLocationCoordinate2DMake(37.332826,-122.061314);
 //    CLLocationCoordinate2D center3 = CLLocationCoordinate2DMake(37.333639,-122.073465);
@@ -82,6 +97,7 @@
 //    CLLocationCoordinate2D center5 = CLLocationCoordinate2DMake(37.340149,-122.088240);
 //    CLLocationCoordinate2D center6 = CLLocationCoordinate2DMake(37.342496,-122.092465);
     
+    //北辰机械厂
     CLLocationCoordinate2D center1 = CLLocationCoordinate2DMake(40.057335, 116.362653);
     CLLocationCoordinate2D center2 = CLLocationCoordinate2DMake(40.057435, 116.362653);
     CLLocationCoordinate2D center3 = CLLocationCoordinate2DMake(40.057335, 116.362753);
@@ -89,22 +105,20 @@
     CLLocationCoordinate2D center5 = CLLocationCoordinate2DMake(40.057335, 116.362853);
     CLLocationCoordinate2D center6 = CLLocationCoordinate2DMake(40.057135, 116.362653);
     
-    CLLocationCoordinate2D zgcSOHO = CLLocationCoordinate2DMake(116.316478,39.989615);
-    CLLocationCoordinate2D yuxinSubway = CLLocationCoordinate2DMake(116.353997,40.066124);
-    CLLocationCoordinate2D yongtaizhuang = CLLocationCoordinate2DMake(116.361159,40.043692);
-    CLLocationCoordinate2D lincuiqiao = CLLocationCoordinate2DMake(116.378905,40.027995);
-    CLLocationCoordinate2D senlingongyuan = CLLocationCoordinate2DMake(116.399036,40.016211);
-    CLLocationCoordinate2D beitucheng = CLLocationCoordinate2DMake(116.400663,39.983255);
-    CLLocationCoordinate2D mudanyuan = CLLocationCoordinate2DMake(116.376446,39.982371);
-    CLLocationCoordinate2D zhichunli = CLLocationCoordinate2DMake(116.336091,39.982061);
-    CLLocationCoordinate2D haidianhuangzhuang = CLLocationCoordinate2DMake(116.324348,39.981865);
-    CLLocationCoordinate2D zhongguancun = CLLocationCoordinate2DMake(116.323066,39.989956);
+    //上班路上
+    CLLocationCoordinate2D zgcSOHO = CLLocationCoordinate2DMake(39.982488,116.303631);
+    CLLocationCoordinate2D yuxinSubway = CLLocationCoordinate2DMake(40.066124,116.353997);
+    CLLocationCoordinate2D yongtaizhuang = CLLocationCoordinate2DMake(40.043692,116.361159);
+    CLLocationCoordinate2D lincuiqiao = CLLocationCoordinate2DMake(40.027995,116.378905);
+    CLLocationCoordinate2D senlingongyuan = CLLocationCoordinate2DMake(40.016211,116.399036);
+    CLLocationCoordinate2D beitucheng = CLLocationCoordinate2DMake(39.983255,116.400663);
+    CLLocationCoordinate2D mudanyuan = CLLocationCoordinate2DMake(39.982371,116.376446);
+    CLLocationCoordinate2D zhichunli = CLLocationCoordinate2DMake(39.982061,116.336091);
+    CLLocationCoordinate2D haidianhuangzhuang = CLLocationCoordinate2DMake(39.981865,116.324348);
+    CLLocationCoordinate2D zhongguancun = CLLocationCoordinate2DMake(39.989956,116.323066);
     
     
-    
-    
-    
-    
+  
     
     CLCircularRegion *monitorRegion1 = [[CLCircularRegion alloc] initWithCenter:center1 radius:5 identifier:@"myregion1"];
     CLCircularRegion *monitorRegion2 = [[CLCircularRegion alloc] initWithCenter:center2 radius:5 identifier:@"myregion2"];
@@ -114,15 +128,15 @@
     CLCircularRegion *monitorRegion6 = [[CLCircularRegion alloc] initWithCenter:center6 radius:5 identifier:@"myregion6"];
 
     CLCircularRegion *zgcSohuRegion = [[CLCircularRegion alloc] initWithCenter:zgcSOHO radius:100 identifier:@"zgcSohu"];
-    CLCircularRegion *yuxinRegion = [[CLCircularRegion alloc] initWithCenter:yuxinSubway radius:100 identifier:@"yuxinSubway"];
-    CLCircularRegion *yongtaizRegion = [[CLCircularRegion alloc] initWithCenter:yongtaizhuang radius:100 identifier:@"yongtaizhuangSubway"];
-    CLCircularRegion *slgyRegion = [[CLCircularRegion alloc] initWithCenter:senlingongyuan radius:100 identifier:@"senLinGongYuanSubway"];
-    CLCircularRegion *lincuiqiaoRegion = [[CLCircularRegion alloc] initWithCenter:lincuiqiao radius:100 identifier:@"lincuiqiao"];
-    CLCircularRegion *beituchengRegion = [[CLCircularRegion alloc] initWithCenter:beitucheng radius:100 identifier:@"beiTuCheng"];
-    CLCircularRegion *mudanyuanRegion = [[CLCircularRegion alloc] initWithCenter:mudanyuan radius:100 identifier:@"muDanYuan"];
-    CLCircularRegion *zhicunliRegion = [[CLCircularRegion alloc] initWithCenter:zhichunli radius:100 identifier:@"zhiCunLi"];
-    CLCircularRegion *haidianRegion = [[CLCircularRegion alloc] initWithCenter:haidianhuangzhuang radius:100 identifier:@"haiDianHuangZhuang"];
-    CLCircularRegion *zgcRegion = [[CLCircularRegion alloc] initWithCenter:zhongguancun radius:100 identifier:@"zhongGuanCun"];
+    CLCircularRegion *yuxinRegion = [[CLCircularRegion alloc] initWithCenter:yuxinSubway radius:400 identifier:@"yuxinSubway"];
+    CLCircularRegion *yongtaizRegion = [[CLCircularRegion alloc] initWithCenter:yongtaizhuang radius:400 identifier:@"yongtaizhuangSubway"];
+    CLCircularRegion *slgyRegion = [[CLCircularRegion alloc] initWithCenter:senlingongyuan radius:400 identifier:@"senLinGongYuanSubway"];
+    CLCircularRegion *lincuiqiaoRegion = [[CLCircularRegion alloc] initWithCenter:lincuiqiao radius:400 identifier:@"lincuiqiao"];
+    CLCircularRegion *beituchengRegion = [[CLCircularRegion alloc] initWithCenter:beitucheng radius:400 identifier:@"beiTuCheng"];
+    CLCircularRegion *mudanyuanRegion = [[CLCircularRegion alloc] initWithCenter:mudanyuan radius:400 identifier:@"muDanYuan"];
+    CLCircularRegion *zhicunliRegion = [[CLCircularRegion alloc] initWithCenter:zhichunli radius:400 identifier:@"zhiCunLi"];
+    CLCircularRegion *haidianRegion = [[CLCircularRegion alloc] initWithCenter:haidianhuangzhuang radius:400 identifier:@"haiDianHuangZhuang"];
+    CLCircularRegion *zgcRegion = [[CLCircularRegion alloc] initWithCenter:zhongguancun radius:400 identifier:@"zhongGuanCun"];
 
 
     [self.locationManager startMonitoringForRegion:monitorRegion1];
@@ -164,6 +178,8 @@ static NSString *DownloadURLString = @"http://sqdd.myapp.com/myapp/qqteam/Androi
     [task resume];
 }
 
+#pragma mark - location delegate
+
 static int locationUpdateCount = 0;
 -(void)locationManager:(CLLocationManager *)manager didUpdateLocations:(NSArray<CLLocation *> *)locations
 {
@@ -185,6 +201,8 @@ static int locationUpdateCount = 0;
         }
     }
 }
+
+
 
 -(void)locationManager:(CLLocationManager *)manager didEnterRegion:(CLRegion *)region
 {
@@ -208,6 +226,18 @@ static int locationUpdateCount = 0;
 //    }
 
 }
+
+-(void)locationManager:(CLLocationManager *)manager monitoringDidFailForRegion:(CLRegion *)region withError:(NSError *)error
+{
+    NSString *info = [NSString stringWithFormat:@"区域：%@,failed monitor region %@",[NSDate date],region.identifier];
+    NSLog(@"%@",info);
+    [self makeNotification:info];
+}
+
+//-(void)locationManager:(CLLocationManager *)manager didStartMonitoringForRegion:(CLRegion *)region
+//{
+//    NSLog(@"start monitor region %@",region.identifier);
+//}
 
 -(void)makeNotification:(NSString *)content
 {
@@ -239,6 +269,8 @@ static int locationUpdateCount = 0;
     [[UIApplication sharedApplication]presentLocalNotificationNow:local];
 }
 
+#pragma mark - lazy load
+
 -(NSURLSession *)session
 {
     if (!_session) {
@@ -256,6 +288,8 @@ static int locationUpdateCount = 0;
     }
     return _backgroundSession;
 }
+
+#pragma mark - URLSessionDelegate
 
 -(void)URLSession:(NSURLSession *)session didBecomeInvalidWithError:(NSError *)error
 {
