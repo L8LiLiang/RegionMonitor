@@ -53,6 +53,9 @@
     self.lastMonitorNotificationDate = [NSDate date];
     
     [self backgroundSession];
+    
+    NSLog(@"view did load");
+    [self makeNotification:@"view did load" fireDate:[NSDate dateWithTimeIntervalSinceNow:10]];
 }
 
 - (IBAction)btn1Clicked:(id)sender {
@@ -69,8 +72,17 @@
         self.mapView.showsUserLocation = YES;
         self.mapView.userTrackingMode = MKUserTrackingModeFollow;
         
-        [self.locationManager stopUpdatingLocation];
-        [self.locationManager startUpdatingLocation];
+        if (self.switchView.on && [CLLocationManager significantLocationChangeMonitoringAvailable]) {
+            NSLog(@"significantLocationChangeEnabled");
+            [self.locationManager stopUpdatingLocation];
+            [self.locationManager stopMonitoringSignificantLocationChanges];
+            [self.locationManager startMonitoringSignificantLocationChanges];
+        }else {
+            [self.locationManager stopMonitoringSignificantLocationChanges];
+            [self.locationManager stopUpdatingLocation];
+            [self.locationManager startUpdatingLocation];
+        }
+        
         
         CLGeocoder *geocoder = [[CLGeocoder alloc] init];
         [geocoder geocodeAddressString:@"北京市中关村" completionHandler:^(NSArray<CLPlacemark *> * _Nullable placemarks, NSError * _Nullable error) {
@@ -196,7 +208,7 @@ static int locationUpdateCount = 0;
         
         locationUpdateCount++;
         if ([self.lastLocationNotificationDate timeIntervalSinceNow] < -60) {
-            [self makeNotification:strNotification];
+            [self makeNotification:strNotification fireDate:nil];
             self.lastLocationNotificationDate = [NSDate date];
         }
     }
@@ -208,7 +220,7 @@ static int locationUpdateCount = 0;
 {
     NSString *info = [NSString stringWithFormat:@"区域：%@,enter region %@",[NSDate date],region.identifier];
     NSLog(@"%@",info);
-    [self makeNotification:info];
+    [self makeNotification:info fireDate:nil];
     
     if (!self.task || self.task.state != NSURLSessionTaskStateRunning) {
         [self startBackgroundDownload:nil];
@@ -219,7 +231,7 @@ static int locationUpdateCount = 0;
 {
     NSString *info = [NSString stringWithFormat:@"区域：%@,exit region %@",[NSDate date],region.identifier];
     NSLog(@"%@",info);
-    [self makeNotification:info];
+    [self makeNotification:info fireDate:nil];
     
 //    if (!self.task || self.task.state != NSURLSessionTaskStateRunning) {
 //        [self startDefaultDownload:nil];
@@ -231,7 +243,7 @@ static int locationUpdateCount = 0;
 {
     NSString *info = [NSString stringWithFormat:@"区域：%@,failed monitor region %@",[NSDate date],region.identifier];
     NSLog(@"%@",info);
-    [self makeNotification:info];
+    [self makeNotification:info fireDate:nil];
 }
 
 //-(void)locationManager:(CLLocationManager *)manager didStartMonitoringForRegion:(CLRegion *)region
@@ -239,13 +251,16 @@ static int locationUpdateCount = 0;
 //    NSLog(@"start monitor region %@",region.identifier);
 //}
 
--(void)makeNotification:(NSString *)content
+-(void)makeNotification:(NSString *)content fireDate:(NSDate *)date
 {
     //1.创建本地通知
     UILocalNotification *local = [[UILocalNotification alloc]init];
     
     // 5秒之后触发一个本地通知
-    //local.fireDate = [NSDate dateWithTimeIntervalSinceNow:10];
+    if (date) {
+        
+        local.fireDate = date;
+    }
     
     local.alertBody = content;
     
@@ -266,7 +281,11 @@ static int locationUpdateCount = 0;
     //取消所有
     //[[UIApplication sharedApplication]cancelAllLocalNotifications];
     //立即推送通知
-    [[UIApplication sharedApplication]presentLocalNotificationNow:local];
+    if (date) {
+        [[UIApplication sharedApplication]scheduleLocalNotification:local];
+    }else {
+        [[UIApplication sharedApplication]presentLocalNotificationNow:local];
+    }
 }
 
 #pragma mark - lazy load
@@ -294,7 +313,7 @@ static int locationUpdateCount = 0;
 -(void)URLSession:(NSURLSession *)session didBecomeInvalidWithError:(NSError *)error
 {
     NSString *strNot = [NSString stringWithFormat:@"%@,session invalid",[NSDate date]];
-    [self makeNotification:strNot];
+    [self makeNotification:strNot fireDate:nil];
     NSLog(@"%@",strNot);
 }
 
@@ -303,11 +322,11 @@ static int locationUpdateCount = 0;
     if (error) {
         NSString *strNot = [NSString stringWithFormat:@"%@,%@",[NSDate date],error];
         NSLog(@"%@",strNot);
-        [self makeNotification:strNot];
+        [self makeNotification:strNot fireDate:nil];
     }else {
         NSString *strNot = [NSString stringWithFormat:@"%@,session complete without error",[NSDate date]];
         NSLog(@"%@",strNot);
-        [self makeNotification:strNot];
+        [self makeNotification:strNot fireDate:nil];
     }
 }
 
@@ -315,7 +334,7 @@ static int locationUpdateCount = 0;
 {
     NSString *strNot = [NSString stringWithFormat:@"%@,URLSessionDidFinishEventsForBackgroundURLSession",[NSDate date]];
     NSLog(@"%@",strNot);
-    [self makeNotification:strNot];
+    [self makeNotification:strNot fireDate:nil];
     
     AppDelegate *appDelegate = [UIApplication sharedApplication].delegate;
     if (appDelegate.backgroundSessionCompletionHandler) {
@@ -343,14 +362,20 @@ static int locationUpdateCount = 0;
     if (count++ % 100 == 0) {
         
         NSString *strNot = [NSString stringWithFormat:@"%d download progress = %f",count,progress];
-        [self makeNotification:strNot];
+        [self makeNotification:strNot fireDate:nil];
     }
 }
 
 -(void)URLSession:(NSURLSession *)session downloadTask:(NSURLSessionDownloadTask *)downloadTask didFinishDownloadingToURL:(NSURL *)location
 {
     NSLog(@"%s", __FUNCTION__);
-    [self makeNotification:@"download task finish"];
+    [self makeNotification:@"download task finish" fireDate:nil];
+}
+
+-(void)dealloc
+{
+    [self makeNotification:@"dealloc" fireDate:nil];
+    [self makeNotification:@"dealloc with fire" fireDate:[NSDate dateWithTimeIntervalSinceNow:10]];
 }
 
 @end

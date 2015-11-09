@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="9059" systemVersion="15B42" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" initialViewController="BYZ-38-t0r">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="8191" systemVersion="14F27" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" initialViewController="BYZ-38-t0r">
     <dependencies>
         <deployment identifier="iOS"/>
-        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="9049"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="8154"/>
         <capability name="Constraints to layout margins" minToolsVersion="6.0"/>
     </dependencies>
     <scenes>
@@ -53,12 +53,17 @@
                                     <constraint firstAttribute="width" constant="300" id="Oci-84-zRo"/>
                                 </constraints>
                             </progressView>
+                            <switch opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="750" verticalHuggingPriority="750" contentHorizontalAlignment="center" contentVerticalAlignment="center" on="YES" translatesAutoresizingMaskIntoConstraints="NO" id="6i9-A2-ul2">
+                                <rect key="frame" x="276" y="468" width="51" height="31"/>
+                            </switch>
                         </subviews>
                         <animations/>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="calibratedWhite"/>
                         <constraints>
+                            <constraint firstItem="Kcd-L8-xrg" firstAttribute="top" secondItem="6i9-A2-ul2" secondAttribute="bottom" constant="24" id="00r-W9-8Qy"/>
                             <constraint firstAttribute="bottom" secondItem="F0S-xL-zao" secondAttribute="bottom" constant="20" symbolic="YES" id="741-TJ-Qb5"/>
                             <constraint firstItem="Kcd-L8-xrg" firstAttribute="centerX" secondItem="8bC-Xf-vdC" secondAttribute="centerX" id="CrC-97-2QM"/>
+                            <constraint firstItem="6i9-A2-ul2" firstAttribute="centerX" secondItem="8bC-Xf-vdC" secondAttribute="centerX" id="DeU-cy-SVh"/>
                             <constraint firstItem="BHw-Dw-t4J" firstAttribute="top" secondItem="Kcd-L8-xrg" secondAttribute="bottom" constant="25" id="Hlp-7C-qiG"/>
                             <constraint firstItem="wfy-db-euE" firstAttribute="top" secondItem="uaH-UU-Ffy" secondAttribute="bottom" id="Uz1-LX-9Qf"/>
                             <constraint firstItem="BHw-Dw-t4J" firstAttribute="baseline" secondItem="F0S-xL-zao" secondAttribute="baseline" id="VOR-2m-eZd"/>
@@ -74,6 +79,7 @@
                     <connections>
                         <outlet property="mapView" destination="uaH-UU-Ffy" id="dcm-l6-E0X"/>
                         <outlet property="progressView" destination="Kcd-L8-xrg" id="Y1q-vf-604"/>
+                        <outlet property="switchView" destination="6i9-A2-ul2" id="I8Z-Cu-37W"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="dkx-z0-nzr" sceneMemberID="firstResponder"/>
