@@ -55,7 +55,7 @@
     [self backgroundSession];
     
     NSLog(@"view did load");
-    [self makeNotification:@"view did load" fireDate:[NSDate dateWithTimeIntervalSinceNow:10]];
+    [self makeNotification:@"view did load" fireDate:[NSDate dateWithTimeIntervalSinceNow:4]];
 }
 
 - (IBAction)btn1Clicked:(id)sender {
@@ -196,7 +196,7 @@ static int locationUpdateCount = 0;
 -(void)locationManager:(CLLocationManager *)manager didUpdateLocations:(NSArray<CLLocation *> *)locations
 {
     CLLocation *location = locations.firstObject;
-    if ([location.timestamp timeIntervalSinceNow] > -10) {
+    //if ([location.timestamp timeIntervalSinceNow] > -10) {
 //        [self.locationManager stopUpdatingLocation];
         self.myLocation = location;
         NSLog(@"%f,%f",location.coordinate.latitude,location.coordinate.longitude);
@@ -207,11 +207,11 @@ static int locationUpdateCount = 0;
         NSString *strNotification = [NSString stringWithFormat:@"定位：%@_%f_%f",[NSDate date],location.coordinate.latitude,location.coordinate.longitude];
         
         locationUpdateCount++;
-        if ([self.lastLocationNotificationDate timeIntervalSinceNow] < -60) {
+        if (self.switchView.on || [self.lastLocationNotificationDate timeIntervalSinceNow] < -60) {
             [self makeNotification:strNotification fireDate:nil];
             self.lastLocationNotificationDate = [NSDate date];
         }
-    }
+    //}
 }
 
 
@@ -375,7 +375,7 @@ static int locationUpdateCount = 0;
 -(void)dealloc
 {
     [self makeNotification:@"dealloc" fireDate:nil];
-    [self makeNotification:@"dealloc with fire" fireDate:[NSDate dateWithTimeIntervalSinceNow:10]];
+    [self makeNotification:@"dealloc with fire" fireDate:[NSDate dateWithTimeIntervalSinceNow:4]];
 }
 
 @end

@@ -25,7 +25,7 @@
   completionHandler:(void (^)())completionHandler
 {
     NSLog(@"%s", __FUNCTION__);
-    [self makeNotification:@"handleEventsForBackgroundURLSession" fireDate:[NSDate dateWithTimeIntervalSinceNow:10]];
+    [self makeNotification:@"handleEventsForBackgroundURLSession" fireDate:nil];
     /*
      这个方法中，我们并没有根据identifier创建session，因为当系统重新启动应用程序时，viewController的viewDidLoad方法会被调用，而viewDidLoad方法中会创建session。而且handleEventsForBackgroundURLSession方法传过来的identifier实际上就是viewDidLoad方法中创建session时使用的identifier。
      
@@ -42,7 +42,7 @@
     [[UIApplication sharedApplication]registerUserNotificationSettings:settings];
     
     NSLog(@"didFinishLaunchingWithOptions");
-    [self makeNotification:@"application:didFinishLaunchingWithOptions" fireDate:[NSDate dateWithTimeIntervalSinceNow:10]];
+    [self makeNotification:@"application:didFinishLaunchingWithOptions" fireDate:[NSDate dateWithTimeIntervalSinceNow:4]];
     
     return YES;
 }
@@ -64,13 +64,13 @@
 - (void)applicationWillEnterForeground:(UIApplication *)application {
     // Called as part of the transition from the background to the inactive state; here you can undo many of the changes made on entering the background.
     NSLog(@"%s",__func__);
-    [self makeNotification:@"applicationWillEnterForeground" fireDate:[NSDate dateWithTimeIntervalSinceNow:10]];
+    [self makeNotification:@"applicationWillEnterForeground" fireDate:[NSDate dateWithTimeIntervalSinceNow:4]];
 }
 
 - (void)applicationDidBecomeActive:(UIApplication *)application {
     // Restart any tasks that were paused (or not yet started) while the application was inactive. If the application was previously in the background, optionally refresh the user interface.
     NSLog(@"%s",__func__);
-    [self makeNotification:@"applicationDidBecomeActive" fireDate:[NSDate dateWithTimeIntervalSinceNow:10]];
+    [self makeNotification:@"applicationDidBecomeActive" fireDate:[NSDate dateWithTimeIntervalSinceNow:4]];
 }
 
 - (void)applicationWillTerminate:(UIApplication *)application {
